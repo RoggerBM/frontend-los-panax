@@ -27,7 +27,7 @@ function MedicalCross() {
   )
 }
 
-export default function CrewHeader({ crew, linkStatus, environment, onEnvironmentChange, voice, onSpeak, transcript }) {
+export default function CrewHeader({ crew, linkStatus, environment, onEnvironmentChange, voice, onSpeak, transcript, showTranscript }) {
   const navigate = useNavigate()
   const now = useNow()
   const day = Math.max(1, Math.floor((now - MISSION_START) / 86400000))
@@ -125,9 +125,13 @@ export default function CrewHeader({ crew, linkStatus, environment, onEnvironmen
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1540px] border-t border-line/80 bg-void px-4 py-1">
-        <p className="truncate font-mono text-[11px] text-cyan">[AEGIS-MED AI]: {transcript}</p>
-      </div>
+      {showTranscript && (
+        <div className="mx-auto max-w-[1540px] border-t border-line/80 bg-void px-4 py-1">
+          <p className="truncate font-mono text-[11px] text-cyan" title={transcript}>
+            [AEGIS-MED AI]: {transcript}
+          </p>
+        </div>
+      )}
     </header>
   )
 }

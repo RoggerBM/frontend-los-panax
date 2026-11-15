@@ -19,7 +19,7 @@ export default function FatigueTestCard() {
   const { crew } = useCrew()
 
   return (
-    <section className="rounded-xl border-[1.5px] border-cyan/70 bg-[linear-gradient(135deg,rgb(56_254_220/0.10)_0%,#111726_60%)] p-4 shadow-[0_0_18px_rgb(56_254_220/0.12)]">
+    <section className="rounded-xl border-[1.5px] border-cyan/70 bg-[linear-gradient(135deg,#143238_0%,#111726_60%)] p-4 shadow-[0_0_18px_rgb(56_254_220/0.12)]">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-cyan">Fatigue test</span>

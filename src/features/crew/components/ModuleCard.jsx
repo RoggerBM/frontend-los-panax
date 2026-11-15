@@ -24,7 +24,12 @@ export default function ModuleCard({ mod, data, wide = false, onClick }) {
       )}
       style={
         alert
-          ? { borderColor: `${st.hex}aa`, backgroundColor: `${st.hex}10`, boxShadow: `0 6px 22px ${st.hex}22` }
+          ? {
+              borderColor: `${st.hex}aa`,
+              // Tinte del estado sobre el panel opaco, para que el fondo de estrellas no se vea a través
+              background: `linear-gradient(${st.hex}10, ${st.hex}10), #111726`,
+              boxShadow: `0 6px 22px ${st.hex}22`,
+            }
           : undefined
       }
     >

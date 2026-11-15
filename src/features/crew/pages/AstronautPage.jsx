@@ -14,6 +14,24 @@ const Body3D = lazy(() => import('../components/Body3D'))
 
 const ringHex = (level) => statusOf(level).hex
 
+// Prioridad clínica de los módulos al decidir cuáles llevan gráfico
+const PRIORITY = ['cardio', 'rad', 'fat', 'inm', 'nut', 'con', 'act']
+const CHARTED = 3
+// Gravedad para ordenar: crítico > revisión > fallo de sensor > nominal
+const SEVERITY = { 2: 3, 1: 2, '-1': 1, 0: 0 }
+
+/**
+ * Solo los módulos más importantes llevan gráfico: cardiovascular (siempre, lleva el ECG)
+ * + los 2 más graves (a igual gravedad, por prioridad clínica). El resto va a una lista compacta.
+ */
+function splitModules(m) {
+  const ranked = PRIORITY.filter((k) => k !== 'cardio')
+    .map((k) => MODULES.find((x) => x.key === k))
+    .sort((a, b) => SEVERITY[m[b.key].st] - SEVERITY[m[a.key].st] || PRIORITY.indexOf(a.key) - PRIORITY.indexOf(b.key))
+  const cardio = MODULES.find((x) => x.key === 'cardio')
+  return { charted: [cardio, ...ranked.slice(0, CHARTED - 1)], others: ranked.slice(CHARTED - 1) }
+}
+
 function protocolFor(member) {
   const r = member.readings
   if (member.level === 2) {
@@ -75,8 +93,7 @@ export default function AstronautPage() {
   const st = statusOf(member.level)
   const r = member.readings
   const m = member.modules
-  const ordered = MODULES.slice().sort((a, b) => m[b.key].st - m[a.key].st)
-  const cards = [MODULES[0], ...ordered.filter((x) => x.key !== 'cardio')]
+  const { charted, others } = splitModules(m)
   const first = member.flagged.slice().sort((a, b) => m[b.key].st - m[a.key].st)[0]
   const protocol = protocolFor(member)
   const zoneMods = BODY_ZONES[zone].modules.map((k) => MODULES.find((x) => x.key === k))
@@ -133,25 +150,9 @@ export default function AstronautPage() {
         <div className="space-y-4">
           <Panel>
             <SectionLabel right={<span className="font-mono text-[10px] text-cyan">3D TWIN</span>}>Tap a body area</SectionLabel>
-            <div className="mb-2 flex flex-wrap gap-1">
-              {Object.entries(BODY_ZONES).map(([z, info]) => (
-                <button
-                  key={z}
-                  type="button"
-                  onClick={() => setZone(z)}
-                  className={clsx(
-                    'flex items-center gap-1.5 rounded-md border px-2 py-1 font-mono text-[10.5px] font-bold transition',
-                    zone === z ? 'border-cyan bg-cyan/15 text-cyan' : 'border-line bg-void text-slate-300 hover:border-cyan/60',
-                  )}
-                >
-                  <StatusDot level={zoneLevels[z]} />
-                  {info.label}
-                </button>
-              ))}
-            </div>
             <Suspense
               fallback={
-                <div className="flex h-[420px] items-center justify-center rounded-lg border border-line/70 bg-void/60 font-mono text-xs text-cyan">
+                <div className="flex h-[460px] items-center justify-center rounded-lg border border-line/70 bg-void/60 font-mono text-xs text-cyan">
                   Loading 3D model…
                 </div>
               }
@@ -159,7 +160,7 @@ export default function AstronautPage() {
               <Body3D zoneLevels={zoneLevels} selected={zone} onSelect={setZone} name={member.name.split(' ')[0]} haloHex={st.hex} />
             </Suspense>
             <p className="mt-1.5 text-center text-[11px] text-slate-500">
-              Drag to rotate · scroll to zoom · tap a body part or a marker
+              Drag to rotate · scroll to zoom · tap a body part or a marker · tap empty space for the whole body
             </p>
 
             <div className="mt-2 space-y-1.5 rounded-lg border-[1.5px] border-cyan/45 bg-void p-3">
@@ -190,23 +191,6 @@ export default function AstronautPage() {
               })}
             </div>
 
-            <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-              {MODULES.map((x) => {
-                const Icon = x.icon
-                return (
-                  <button
-                    key={x.key}
-                    type="button"
-                    onClick={() => setZone(x.zone)}
-                    className="flex items-center gap-1.5 rounded-full border border-line bg-void px-2.5 py-1 text-[11px] text-slate-300 transition hover:border-cyan hover:text-cyan"
-                  >
-                    <StatusDot level={m[x.key].st} />
-                    <Icon className="h-3.5 w-3.5" aria-hidden />
-                    {x.name}
-                  </button>
-                )
-              })}
-            </div>
           </Panel>
 
           <Panel>
@@ -253,7 +237,10 @@ export default function AstronautPage() {
           {first && (
             <div
               className="flex items-start gap-2 rounded-xl border-[1.5px] px-3.5 py-2.5 text-sm"
-              style={{ borderColor: statusOf(m[first.key].st).hex, backgroundColor: `${statusOf(m[first.key].st).hex}14` }}
+              style={{
+                borderColor: statusOf(m[first.key].st).hex,
+                background: `linear-gradient(${statusOf(m[first.key].st).hex}14, ${statusOf(m[first.key].st).hex}14), #111726`,
+              }}
             >
               <Zap className="mt-0.5 h-4 w-4 shrink-0" style={{ color: statusOf(m[first.key].st).hex }} aria-hidden />
               <span className="text-slate-200">
@@ -270,13 +257,51 @@ export default function AstronautPage() {
                 )
               }
             >
-              Modules · 7 days
+              Key modules · 7 days
             </SectionLabel>
             <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-              {cards.map((x) => (
-                <ModuleCard key={x.key} mod={x} data={m[x.key]} wide={x.key === 'cardio'} onClick={() => navigate(`/mod/${x.key}`)} />
+              {charted.map((x, i) => (
+                <ModuleCard
+                  key={x.key}
+                  mod={x}
+                  data={m[x.key]}
+                  // Cardio a lo ancho; si el resto queda impar, la última tarjeta también
+                  wide={x.key === 'cardio' || (i === charted.length - 1 && (charted.length - 1) % 2 === 1)}
+                  onClick={() => navigate(`/mod/${x.key}`)}
+                />
               ))}
             </div>
+
+            {others.length > 0 && (
+              <div className="mt-2.5 rounded-xl border-[1.5px] border-line bg-panel p-2.5">
+                <p className="mb-1.5 px-1 font-mono text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                  Other modules
+                </p>
+                <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+                  {others.map((x) => {
+                    const Icon = x.icon
+                    return (
+                      <button
+                        key={x.key}
+                        type="button"
+                        onClick={() => navigate(`/mod/${x.key}`)}
+                        className="flex items-center gap-2 rounded-lg border border-line bg-void px-2.5 py-2 text-left text-xs transition hover:border-cyan/60"
+                      >
+                        <Icon className="h-3.5 w-3.5 shrink-0 text-cyan" aria-hidden />
+                        <span className="truncate font-semibold text-slate-200">{x.name}</span>
+                        <span
+                          className="ml-auto shrink-0 font-mono"
+                          style={{ color: m[x.key].st === 0 ? '#CBD5E1' : statusOf(m[x.key].st).fg }}
+                        >
+                          {formatValue(m[x.key].v, x.d)} <span className="text-slate-500">{x.unit}</span>
+                        </span>
+                        {m[x.key].st === 0 ? <StatusDot level={0} /> : <StatusTag level={m[x.key].st} short />}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           <Panel className="space-y-2">

@@ -303,8 +303,8 @@ export function createBody3D(container, opts = {}) {
   }
   const onUp = (e) => {
     if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6) {
-      const z = pick(e)
-      if (z) opts.onSelect?.(z)
+      // Un toque fuera del cuerpo devuelve null (vista de cuerpo completo)
+      opts.onSelect?.(pick(e))
     }
     down = null
   }
@@ -378,6 +378,8 @@ export function createBody3D(container, opts = {}) {
   if (tagMesh) tagMesh.visible = !!opts.name
 
   return {
+    /** Lienzo WebGL (para ajustar su posición/capa desde fuera). */
+    canvas: renderer.domElement,
     setZones(next) {
       info = next
       applyLook()

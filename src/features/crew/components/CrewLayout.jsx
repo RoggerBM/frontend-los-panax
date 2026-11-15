@@ -1,5 +1,7 @@
-import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { LayoutList } from 'lucide-react'
+import { useCallback, useState } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
+import Starfield from '@/shared/components/Starfield'
 import { useVoiceCopilot } from '@/shared/hooks/useVoiceCopilot'
 import { CrewProvider } from '../context/CrewProvider'
 import { useCrew } from '../context/crewContext'
@@ -7,6 +9,16 @@ import BottomNav from './BottomNav'
 import CrewHeader from './CrewHeader'
 import ModuleSidebar from './ModuleSidebar'
 import ScreensSheet from './ScreensSheet'
+
+const NAV_KEY = 'aegis.nav.open'
+
+function readNavOpen() {
+  try {
+    return localStorage.getItem(NAV_KEY) !== '0'
+  } catch {
+    return true
+  }
+}
 
 function buildTranscript(crew) {
   const flagged = crew.filter((c) => c.level > 0)
@@ -22,24 +34,55 @@ function buildTranscript(crew) {
 
 function Shell() {
   const { crew, linkStatus, demoMode, setDemoMode, environment, setEnvironment, toast } = useCrew()
+  const { pathname } = useLocation()
   const voice = useVoiceCopilot()
   const [screensOpen, setScreensOpen] = useState(false)
+  const [navOpen, setNavOpen] = useState(readNavOpen)
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const transcript = buildTranscript(crew)
 
+  const changeNav = useCallback((open) => {
+    setNavOpen(open)
+    try {
+      localStorage.setItem(NAV_KEY, open ? '1' : '0')
+    } catch {
+      /* preferencia solo en memoria */
+    }
+  }, [])
+
+  const closeMobileNav = useCallback(() => setMobileNavOpen(false), [])
+
   return (
-    <div className="flex min-h-screen flex-col bg-hud text-slate-100 selection:bg-cyan selection:text-void">
+    <div className="relative isolate flex min-h-screen flex-col text-slate-100 selection:bg-cyan selection:text-void">
+      <Starfield />
       <CrewHeader
         crew={crew}
         linkStatus={linkStatus}
         environment={environment}
         onEnvironmentChange={setEnvironment}
         voice={voice}
-        onSpeak={() => voice.speak(`AEGIS-MED medical copilot. ${transcript}`)}        transcript={transcript}
+        onSpeak={() => voice.speak(`AEGIS-MED medical copilot. ${transcript}`)}
+        transcript={transcript}
+        showTranscript={pathname === '/'}
       />
 
-      <div className="mx-auto grid w-full max-w-[1540px] flex-1 grid-cols-1 items-start gap-5 px-3 pb-28 pt-4 sm:px-5 lg:grid-cols-12">
-        <ModuleSidebar crew={crew} />
-        <main className="min-w-0 lg:col-span-9 xl:col-span-10">
+      <div className="mx-auto flex w-full max-w-[1540px] flex-1 items-start gap-5 px-3 pb-28 pt-4 sm:px-5">
+        <ModuleSidebar
+          crew={crew}
+          open={navOpen}
+          onToggle={() => changeNav(!navOpen)}
+          onSelect={() => changeNav(false)}
+          mobileOpen={mobileNavOpen}
+          onMobileClose={closeMobileNav}
+        />
+        <main className="min-w-0 flex-1">
+          <button
+            type="button"
+            onClick={() => setMobileNavOpen(true)}
+            className="mb-3 inline-flex items-center gap-2 rounded-lg border-[1.5px] border-line bg-panel px-3 py-2 text-xs font-semibold text-slate-200 transition hover:border-cyan hover:text-cyan lg:hidden"
+          >
+            <LayoutList className="h-4 w-4 text-cyan" aria-hidden /> Modules
+          </button>
           <Outlet />
         </main>
       </div>
@@ -54,7 +97,8 @@ function Shell() {
         onClose={() => setScreensOpen(false)}
         crew={crew}
         demoMode={demoMode}
-        onDemoModeChange={setDemoMode}      />
+        onDemoModeChange={setDemoMode}
+      />
 
       {toast && (
         <div

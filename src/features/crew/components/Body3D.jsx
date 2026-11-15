@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import Starfield from '@/shared/components/Starfield'
 import { BODY_ZONES } from '../config/modules'
 import { statusOf } from '../config/status'
 import { createBody3D } from '../lib/body3d/scene'
@@ -24,9 +25,12 @@ export default function Body3D({ zoneLevels, selected, onSelect, name, haloHex }
   useEffect(() => {
     try {
       api.current = createBody3D(box.current, {
-        onSelect: (id) => onSelectRef.current(id),
+        // Sin zona (toque en el vacío) -> "body", la vista de cuerpo completo
+        onSelect: (id) => onSelectRef.current(id ?? 'body'),
         onHover: (id, x, y) => setTip(id ? { id, x, y } : null),
       })
+      // El lienzo 3D (transparente) va por encima del campo de estrellas del visor
+      Object.assign(api.current.canvas.style, { position: 'relative', zIndex: '1' })
     } catch {
       // Sin WebGL disponible
       setFailed(true)
@@ -64,12 +68,13 @@ export default function Body3D({ zoneLevels, selected, onSelect, name, haloHex }
   return (
     <div
       ref={box}
-      className="relative h-[420px] w-full select-none overflow-hidden rounded-lg border border-line/70 bg-[radial-gradient(circle_at_50%_40%,#1C2842_0%,#090D16_75%)]"
+      className="relative h-[460px] w-full select-none overflow-hidden rounded-lg border border-line/70 bg-[radial-gradient(circle_at_50%_40%,#141d33_0%,#05080f_80%)]"
       aria-label="Interactive 3D model of the crew member"
     >
+      <Starfield className="absolute inset-0" density={2.5} />
       {failed && (
         <p className="absolute inset-0 flex items-center justify-center p-6 text-center text-sm text-slate-400">
-          Your browser has no WebGL enabled. Use the system buttons to view each area.
+          Your browser has no WebGL enabled, so the 3D body cannot be shown.
         </p>
       )}
       {tip && (
