@@ -107,6 +107,9 @@ export const MODULES = [
 
 export const MODULE_BY_KEY = Object.fromEntries(MODULES.map((m) => [m.key, m]))
 
+/** Módulos con vista de detalle por persona (space-qhealth v31). */
+export const DETAIL_MODULES = new Set(['cardio', 'rad', 'inm', 'fat', 'act'])
+
 /**
  * Sistemas del cuerpo 3D (lib/body3d) y los módulos que agrupan.
  * "body" no es una zona de la malla: la radiación afecta a todo el cuerpo.

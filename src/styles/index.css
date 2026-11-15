@@ -67,6 +67,10 @@
   animation: critical-pulse 1.4s infinite;
 }
 
+@keyframes pleth-scroll {
+  to { transform: translateX(-100px); }
+}
+
 @keyframes heartbeat {
   0% { transform: scale(1); }
   14% { transform: scale(1.28); }

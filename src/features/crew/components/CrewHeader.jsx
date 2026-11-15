@@ -3,9 +3,8 @@ import { Volume2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useNow } from '@/shared/hooks/useNow'
 import { ENVIRONMENTS } from '../config/scenarios'
+import { missionDay } from '../config/mission'
 import { statusOf } from '../config/status'
-
-const MISSION_START = new Date('2026-10-04T00:00:00')
 
 const LINK = {
   live: { label: 'LIVE SENSORS', cls: 'border-lime/40 bg-lime/10 text-lime', dot: 'bg-lime animate-pulse' },
@@ -30,7 +29,7 @@ function MedicalCross() {
 export default function CrewHeader({ crew, linkStatus, environment, onEnvironmentChange, voice, onSpeak, transcript, showTranscript }) {
   const navigate = useNavigate()
   const now = useNow()
-  const day = Math.max(1, Math.floor((now - MISSION_START) / 86400000))
+  const day = missionDay(now)
 
   const flagged = crew.filter((c) => c.level > 0)
   const worst = crew.reduce((acc, c) => (c.level > (acc?.level ?? -1) ? c : acc), null)

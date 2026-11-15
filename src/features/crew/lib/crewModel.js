@@ -125,6 +125,23 @@ function evaluateModules(r, exerciseMin) {
   return out
 }
 
+/** Aleatorio estable en [0,1) por tripulante y canal (equivale a rr(id, n) del HTML de referencia). */
+export function stableRand(id, n) {
+  const x = Math.sin(hashString(id) * 12.9898 + n * 78.233) * 43758.5453
+  return x - Math.floor(x)
+}
+
+/** 23 días previos a la semana (paseo que vuelve a la media), para la tendencia de 30 días. */
+function monthHistory(mod, rnd) {
+  const l = []
+  let x = mod.b
+  for (let i = 0; i < 23; i += 1) {
+    x = mod.b + (x - mod.b) * 0.6 + (rnd() - 0.5) * mod.sd * 1.4
+    l.push(x)
+  }
+  return l
+}
+
 /** Serie de 7 días que termina en el valor actual; si hay alerta, deriva hacia él. */
 function weekSeries(mod, v, st, rnd) {
   const s = Array.from({ length: 7 }, () => mod.b + (rnd() - 0.5) * mod.sd * 1.6)
@@ -154,7 +171,8 @@ export function buildMember(user, index, readings, overrides = {}) {
   const modules = {}
   for (const mod of MODULES) {
     const e = evaluated[mod.key]
-    modules[mod.key] = { ...e, series: weekSeries(mod, e.v, e.st, rnd) }
+    const series = weekSeries(mod, e.v, e.st, rnd)
+    modules[mod.key] = { ...e, series, month: [...monthHistory(mod, rnd), ...series] }
   }
 
   const level = worstLevel(MODULES.map((m) => modules[m.key].st))
