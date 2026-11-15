@@ -7,7 +7,21 @@
   --color-ink: #1F2937;        /* fondo */
   --color-paper: #E0E7FF;      /* texto */
 
+  /* Paleta AEGIS-MED (panel de tripulación) */
+  --color-void: #090D16;       /* fondo */
+  --color-panel: #111726;      /* tarjetas */
+  --color-elevated: #161E31;   /* hover / elevado */
+  --color-inset: #0B101B;      /* cabecera, huecos */
+  --color-line: #24304A;       /* bordes */
+  --color-cyan: #38FEDC;       /* acento HUD */
+  --color-lime: #50EF39;       /* nominal */
+  --color-caution: #F5F557;    /* revisión */
+  --color-critical: #C51111;   /* crítico */
+  --color-cobalt: #132ED1;
+  --color-orange: #EF7D0D;
+
   --font-sans: Arial, Helvetica, sans-serif;
+  --font-mono: ui-monospace, Consolas, "Cascadia Mono", Menlo, monospace;
 
   --animate-scan: scan 2.2s ease-in-out infinite;
   --animate-blink: blink 1s steps(2, start) infinite;
@@ -33,6 +47,37 @@
   body {
     @apply bg-ink font-sans text-paper antialiased;
   }
+}
+
+@utility bg-hud {
+  background-color: var(--color-void);
+  background-image:
+    radial-gradient(circle at 50% 0%, rgb(56 254 220 / 0.05) 0%, transparent 60%),
+    linear-gradient(to right, rgb(36 48 74 / 0.18) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(36 48 74 / 0.18) 1px, transparent 1px);
+  background-size: 100% 100%, 36px 36px, 36px 36px;
+}
+
+@utility animate-heartbeat {
+  animation: heartbeat 1s infinite;
+  transform-origin: center;
+}
+
+@utility animate-critical {
+  animation: critical-pulse 1.4s infinite;
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.28); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.14); }
+  60%, 100% { transform: scale(1); }
+}
+
+@keyframes critical-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
 }
 
 @utility bg-grid {

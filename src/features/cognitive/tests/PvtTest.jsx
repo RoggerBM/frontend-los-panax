@@ -28,17 +28,17 @@ export default function PvtTest({ params, onComplete }) {
         <div
           className={clsx(
             'flex h-44 w-44 items-center justify-center rounded-full border-4',
-            lit ? 'border-brand-soft bg-brand' : 'border-paper/15 bg-paper/5',
+            lit ? 'border-cyan bg-cyan shadow-[0_0_40px_rgb(56_254_220/0.5)]' : 'border-line bg-panel',
           )}
         >
           {lit ? (
-            <span className="text-2xl font-bold text-ink">¡YA!</span>
+            <span className="text-2xl font-extrabold text-void">GO!</span>
           ) : (
-            <span className="text-4xl text-paper/30">+</span>
+            <span className="text-4xl text-slate-600">+</span>
           )}
         </div>
       </StimulusArea>
-      <p className="text-xs text-paper/50">Anticipaciones: {premature}</p>
+      <p className="font-mono text-xs text-slate-400">False starts: {premature}</p>
     </div>
   )
 }

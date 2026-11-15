@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 const ERROR_MESSAGES = {
-  NotAllowedError: 'Permiso de cámara denegado. Habilítalo en el navegador e inténtalo de nuevo.',
-  NotFoundError: 'No se encontró ninguna cámara conectada.',
-  NotReadableError: 'La cámara está siendo usada por otra aplicación.',
-  OverconstrainedError: 'La cámara no admite la configuración solicitada.',
+  NotAllowedError: 'Camera permission denied. Enable it in your browser and try again.',
+  NotFoundError: 'No camera was found.',
+  NotReadableError: 'The camera is being used by another application.',
+  OverconstrainedError: 'The camera does not support the requested settings.',
 }
 
 const CONSTRAINTS = {
@@ -38,7 +38,7 @@ export function useCamera() {
 
   const start = useCallback(async () => {
     if (!navigator.mediaDevices?.getUserMedia) {
-      setError('Este navegador no permite usar la cámara (se requiere https o localhost).')
+      setError('This browser cannot use the camera (https or localhost is required).')
       setStatus('error')
       return false
     }
@@ -59,7 +59,7 @@ export function useCamera() {
       return true
     } catch (err) {
       if (requestId !== requestIdRef.current) return false
-      setError(ERROR_MESSAGES[err?.name] ?? 'No se pudo acceder a la cámara.')
+      setError(ERROR_MESSAGES[err?.name] ?? 'Could not access the camera.')
       setStatus('error')
       return false
     }

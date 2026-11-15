@@ -10,13 +10,13 @@ const faceModules = import.meta.glob('../../../assets/faces/*.{png,jpg,jpeg,webp
 })
 
 const ROLES = [
-  'Comandancia de misión',
-  'Piloto',
-  'Especialista de misión',
-  'Ingeniería de vuelo',
-  'Especialista de carga útil',
+  'Mission Commander',
+  'Pilot',
+  'Mission Specialist',
+  'Flight Engineer',
+  'Payload Specialist',
 ]
-const CLEARANCES = ['ALFA', 'BRAVO', 'CHARLIE']
+const CLEARANCES = ['ALPHA', 'BRAVO', 'CHARLIE']
 
 function toTitleCase(slug) {
   return slug
@@ -34,6 +34,8 @@ function buildUser(path, image) {
     id,
     name: toTitleCase(id),
     image,
+    // Los .svg de la carpeta son marcadores de posición; cualquier otro formato es una foto real
+    hasPhoto: !/\.svg$/i.test(file),
     role: ROLES[h % ROLES.length],
     clearance: CLEARANCES[h % CLEARANCES.length],
     crewCode: `CRW-${String(h % 10000).padStart(4, '0')}`,

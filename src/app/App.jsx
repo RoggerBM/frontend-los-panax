@@ -1,13 +1,13 @@
 import { BrowserRouter } from 'react-router-dom'
-import { AuthProvider } from '@/features/auth'
+import { FatigueResultsProvider } from '@/features/cognitive'
 import AppRoutes from './AppRoutes'
 
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
+      <FatigueResultsProvider>
         <AppRoutes />
-      </AuthProvider>
+      </FatigueResultsProvider>
     </BrowserRouter>
   )
 }

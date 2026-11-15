@@ -1,30 +1,19 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { LoginPage, ProtectedRoute } from '@/features/auth'
-import { DashboardPage } from '@/features/dashboard'
 import { ValidationPage } from '@/features/cognitive'
+import { AstronautPage, CrewHomePage, CrewLayout, EmergencyPage, ModulePage } from '@/features/crew'
 
-// Flujo: /login -> /validacion -> /dashboard
+// Sin login: "/" abre el panel. La validación biométrica solo se pide al hacer un test.
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route
-        path="/validacion"
-        element={
-          <ProtectedRoute>
-            <ValidationPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute requireValidation>
-            <DashboardPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route element={<CrewLayout />}>
+        <Route index element={<CrewHomePage />} />
+        <Route path="ast/:crewId" element={<AstronautPage />} />
+        <Route path="mod/fat/test" element={<ValidationPage />} />
+        <Route path="mod/:moduleKey" element={<ModulePage />} />
+        <Route path="emergencia" element={<EmergencyPage />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }

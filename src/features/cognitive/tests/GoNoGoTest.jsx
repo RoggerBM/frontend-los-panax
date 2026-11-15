@@ -6,8 +6,8 @@ import { useTrialEngine } from '../hooks/useTrialEngine'
 import { createGoNoGoSequence, evaluateGoNoGo, summarizeGoNoGo } from '../logic/goNoGo'
 
 const FEEDBACK = {
-  commission: { text: 'Era rojo: no debías pulsar', className: 'text-amber-300' },
-  omission: { text: 'Demasiado lento', className: 'text-amber-300' },
+  commission: { text: 'It was red: you should not have pressed', className: 'text-caution' },
+  omission: { text: 'Too slow', className: 'text-caution' },
 }
 
 export default function GoNoGoTest({ params, onComplete }) {
@@ -41,7 +41,7 @@ export default function GoNoGoTest({ params, onComplete }) {
             )}
           />
         ) : (
-          <span className="text-4xl text-paper/30">+</span>
+          <span className="text-4xl text-slate-600">+</span>
         )}
       </StimulusArea>
       <p className={clsx('h-4 text-xs', feedback?.className)}>{feedback?.text}</p>

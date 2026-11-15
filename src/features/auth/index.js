@@ -1,6 +1,3 @@
-// API pública del módulo de autenticación
-export { default as AuthProvider } from './context/AuthProvider'
-export { default as ProtectedRoute } from './components/ProtectedRoute'
-export { default as LoginPage } from './pages/LoginPage'
-export { useAuth } from './hooks/useAuth'
+// API pública de identidad: tripulación (carpeta faces) y validación biométrica para los tests
+export { default as BiometricCheck } from './components/BiometricCheck'
 export { getUsers, getUserById } from './services/userService'

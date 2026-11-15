@@ -1,18 +1,17 @@
-/** Mensajes que aparecen en el registro según el % de avance del escaneo. */
+/** Mensajes del registro del escaneo de identidad según el % de avance. */
 export const SCAN_STEPS = [
-  { at: 0, level: 'info', text: () => 'Inicializando enlace con estación terrena...' },
-  { at: 10, level: 'info', text: () => 'Señal adquirida · banda S 2.287 GHz' },
-  { at: 22, level: 'info', text: (u) => `Solicitud de acceso recibida: ${u.crewCode}` },
-  { at: 34, level: 'info', text: () => 'Capturando malla facial (68 puntos de referencia)...' },
-  { at: 50, level: 'warn', text: () => 'Compensando latencia del enlace (+212 ms)' },
-  { at: 62, level: 'info', text: () => 'Verificando signos vitales del operador...' },
-  { at: 78, level: 'info', text: (u) => `Comparando con registro de tripulación: ${u.name}` },
+  { at: 0, level: 'info', text: () => 'Initializing biometric sensor...' },
+  { at: 12, level: 'info', text: (u) => `Identity check requested: ${u.crewCode}` },
+  { at: 28, level: 'info', text: () => 'Capturing facial mesh (68 landmarks)...' },
+  { at: 48, level: 'warn', text: () => 'Compensating cabin lighting...' },
+  { at: 64, level: 'info', text: () => 'Checking liveness (blink and micro-motion)...' },
+  { at: 80, level: 'info', text: (u) => `Matching crew record: ${u.name}` },
   {
     at: 92,
     level: 'ok',
-    text: () => `Coincidencia biométrica ${(96 + Math.random() * 3.9).toFixed(1)}%`,
+    text: () => `Biometric match ${(96 + Math.random() * 3.9).toFixed(1)}%`,
   },
-  { at: 100, level: 'ok', text: (u) => `Acceso concedido · autorización ${u.clearance}` },
+  { at: 100, level: 'ok', text: (u) => `Identity verified · clearance ${u.clearance}` },
 ]
 
 export const SCAN_DURATION_MS = 4500

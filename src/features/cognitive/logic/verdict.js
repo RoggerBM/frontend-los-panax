@@ -3,9 +3,9 @@ import { THRESHOLDS as T } from '../config/validation'
 const RANK = { ok: 0, caution: 1, fail: 2 }
 
 export const VERDICTS = {
-  ok: { label: 'Apto', description: 'Estado de alerta dentro de lo esperado.' },
-  caution: { label: 'Apto con precaución', description: 'Hay signos leves de fatiga. Considera pausas.' },
-  fail: { label: 'No apto', description: 'Signos claros de fatiga. Se recomienda descansar.' },
+  ok: { label: 'Fit', description: 'Alertness within the expected range.' },
+  caution: { label: 'Fit with caution', description: 'Mild signs of fatigue. Consider taking breaks.' },
+  fail: { label: 'Not fit', description: 'Clear signs of fatigue. Rest is recommended.' },
 }
 
 function gradeHigherIsWorse(value, { caution, fail }) {
@@ -32,22 +32,22 @@ const ms = (v) => (v == null ? '—' : `${Math.round(v)} ms`)
 export function evaluateValidation({ pvt, gonogo, stroop }, baseline) {
   const checks = [
     {
-      label: 'Tiempo de reacción',
+      label: 'Reaction time',
       value: ms(pvt.medianRt),
       level: gradeHigherIsWorse(pvt.medianRt, T.pvtMedianRt),
     },
     {
-      label: 'Lapsos de atención',
+      label: 'Attention lapses',
       value: String(pvt.lapses),
       level: gradeHigherIsWorse(pvt.lapses, T.pvtLapses),
     },
     {
-      label: 'Control de impulsos',
-      value: `${gonogo.commissions} error(es)`,
+      label: 'Impulse control',
+      value: `${gonogo.commissions} error(s)`,
       level: gradeHigherIsWorse(gonogo.commissions, T.gonogoCommissions),
     },
     {
-      label: 'Precisión con conflicto',
+      label: 'Accuracy under conflict',
       value: stroop.accuracy == null ? '—' : `${Math.round(stroop.accuracy)} %`,
       level: gradeLowerIsWorse(stroop.accuracy, T.stroopAccuracy),
     },
@@ -58,7 +58,7 @@ export function evaluateValidation({ pvt, gonogo, stroop }, baseline) {
     const ratio = pvt.medianRt / baseRt
     const pct = Math.round((ratio - 1) * 100)
     checks.push({
-      label: 'Frente a tu línea base',
+      label: 'Versus your baseline',
       value: `${pct > 0 ? '+' : ''}${pct} %`,
       level: ratio >= T.baselineSlowdown ? 'caution' : 'ok',
     })
