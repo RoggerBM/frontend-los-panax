@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  /* Paleta del proyecto */
+  --color-brand-soft: #6366F1; /* acento suave: textos destacados, hover */
+  --color-brand: #4F46E5;      /* acento principal: botones, iconos, selección */
+  --color-ink: #1F2937;        /* fondo */
+  --color-paper: #E0E7FF;      /* texto */
+
+  --font-sans: Arial, Helvetica, sans-serif;
+
+  --animate-scan: scan 2.2s ease-in-out infinite;
+  --animate-blink: blink 1s steps(2, start) infinite;
+  --animate-fade-in: fade-in 0.35s ease-out both;
+
+  @keyframes scan {
+    0%, 100% { top: 0%; }
+    50% { top: calc(100% - 2px); }
+  }
+  @keyframes blink {
+    to { visibility: hidden; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@layer base {
+  html, body, #root {
+    min-height: 100%;
+  }
+  body {
+    @apply bg-ink font-sans text-paper antialiased;
+  }
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(rgb(99 102 241 / 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(99 102 241 / 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
