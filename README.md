@@ -1,13 +1,13 @@
-# AEGIS-MED · Frontend
+# Space-Qhealth · Frontend
 
 SPA en **React 19 + Vite 6 + Tailwind v4** que simula un centro de control médico de tripulación. No hay login: `/` abre directamente el panel.
 
 1. **Validación biométrica**: solo se pide al hacer un test. Se elige quién lo hace y la cámara confirma su identidad con un escaneo facial (simulado, no se envía nada).
 2. **Test de fatiga** (~1 min, `/mod/fat/test`): bloque combinado PVT + Go/No-Go + Stroop que estima tiempos de reacción, decisión y control. Se lanza desde el módulo **Fatigue & Sleep** o desde la ficha de cada tripulante (`?crew=<id>` lo preselecciona).
-3. **Panel de tripulación** (diseño AEGIS-MED):
+3. **Panel de tripulación** (diseño basado en AEGIS-MED):
    - `/`: tripulación activa en tarjetas, con alerta global y voz IA.
    - `/ast/:id`: ficha del tripulante con gemelo 3D clicable, metas del día, tarjetas de los 7 módulos y protocolo clínico.
-   - `/mod/:modulo`: comparación de toda la tripulación en un módulo.
+   - `/mod/:modulo`: comparación de toda la tripulación en un módulo. En **Nutrition & Glucose** incluye la vista completa *Nutrition · On-board AI* (registros de 30 días, riesgo explicable, recomendaciones, asistente y mensajes a Tierra).
    - `/emergencia`: pasos y temporizador de RCP.
    - Barra inferior: Atrás, Inicio, Pantallas (accesos y escenarios de demo) y Emergencia.
 

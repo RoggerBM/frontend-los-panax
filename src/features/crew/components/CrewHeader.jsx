@@ -46,11 +46,8 @@ export default function CrewHeader({ crew, linkStatus, environment, onEnvironmen
         <div className="flex items-center justify-between gap-3 lg:col-span-3 lg:justify-start">
           <div className="flex items-center gap-3">
             <div>
-              <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-cyan">AEGIS-MED // HUD</span>
-              <h1 className="text-sm font-extrabold uppercase leading-tight tracking-wide text-white sm:text-base">
-                Crew
-                <br className="hidden sm:inline" /> monitoring
-              </h1>
+              <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-cyan">Crew monitoring // HUD</span>
+              <h1 className="text-lg font-extrabold leading-tight tracking-wide text-white sm:text-xl">Space-Qhealth</h1>
             </div>
             <MedicalCross />
           </div>
@@ -128,7 +125,7 @@ export default function CrewHeader({ crew, linkStatus, environment, onEnvironmen
       {showTranscript && (
         <div className="mx-auto max-w-[1540px] border-t border-line/80 bg-void px-4 py-1">
           <p className="truncate font-mono text-[11px] text-cyan" title={transcript}>
-            [AEGIS-MED AI]: {transcript}
+            [SPACE-QHEALTH AI]: {transcript}
           </p>
         </div>
       )}

@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import { BedDouble, ChevronRight, Dumbbell, GlassWater, MapPin, SatelliteDish, Timer, Utensils, Zap } from 'lucide-react'
 import { Suspense, lazy, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
@@ -70,7 +69,7 @@ function protocolFor(member) {
 /** Ficha del tripulante (Livorbit /ast/:id): gemelo 3D, metas y tarjetas de módulos. */
 export default function AstronautPage() {
   const { crewId } = useParams()
-  const { crew, getMember, showToast } = useCrew()
+  const { getMember, showToast } = useCrew()
   const navigate = useNavigate()
   const member = getMember(crewId)
   // "Whole body" por defecto: el modelo se ve completo, sin zona resaltada ni zoom
@@ -97,6 +96,8 @@ export default function AstronautPage() {
   const first = member.flagged.slice().sort((a, b) => m[b.key].st - m[a.key].st)[0]
   const protocol = protocolFor(member)
   const zoneMods = BODY_ZONES[zone].modules.map((k) => MODULES.find((x) => x.key === k))
+  // Desde la ficha, los módulos se abren solo con los datos de esta persona (sin comparar con otros)
+  const openModule = (key) => navigate(`/mod/${key}?crew=${member.id}`)
 
   return (
     <section className="animate-fade-in space-y-4">
@@ -126,22 +127,6 @@ export default function AstronautPage() {
             <span className="text-xs text-slate-400">bpm</span>
           </span>
           <StatusTag level={member.level} />
-        </div>
-        <div className="flex flex-wrap items-center gap-1.5">
-          {crew.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              onClick={() => navigate(`/ast/${c.id}`)}
-              className={clsx(
-                'flex items-center gap-1.5 rounded-lg border-[1.5px] px-2.5 py-1 text-[11px] font-semibold transition',
-                c.id === member.id ? 'border-cyan bg-cyan/10 text-cyan' : 'border-line bg-void text-slate-300 hover:border-cyan/60',
-              )}
-            >
-              <StatusDot level={c.level} />
-              {c.name.split(' ')[0]}
-            </button>
-          ))}
         </div>
       </div>
 
@@ -177,7 +162,7 @@ export default function AstronautPage() {
                   <button
                     key={x.key}
                     type="button"
-                    onClick={() => navigate(`/mod/${x.key}`)}
+                    onClick={() => openModule(x.key)}
                     className="flex w-full items-center gap-2 rounded-md border border-line bg-panel px-2.5 py-1.5 text-left text-[11.5px] transition hover:border-cyan/60"
                   >
                     <Icon className="h-3.5 w-3.5 shrink-0 text-cyan" aria-hidden />
@@ -202,7 +187,7 @@ export default function AstronautPage() {
                 label="Sleep"
                 value={`${formatValue(r.sleep_hours, 1)} of 8 h`}
                 icon={BedDouble}
-                onClick={() => navigate('/mod/fat')}
+                onClick={() => openModule('fat')}
               />
               <GoalRing
                 pct={r.water_l / 3}
@@ -210,7 +195,7 @@ export default function AstronautPage() {
                 label="Water"
                 value={`${formatValue(r.water_l, 1)} of 3 L`}
                 icon={GlassWater}
-                onClick={() => navigate('/mod/nut')}
+                onClick={() => openModule('nut')}
               />
               <GoalRing
                 pct={m.nut.v / 100}
@@ -218,7 +203,7 @@ export default function AstronautPage() {
                 label="Meals"
                 value={`${m.nut.v}% of goal`}
                 icon={Utensils}
-                onClick={() => navigate('/mod/nut')}
+                onClick={() => openModule('nut')}
               />
               <GoalRing
                 pct={m.act.v / 120}
@@ -226,7 +211,7 @@ export default function AstronautPage() {
                 label="Exercise"
                 value={`${m.act.v} of 120 min`}
                 icon={Dumbbell}
-                onClick={() => navigate('/mod/act')}
+                onClick={() => openModule('act')}
               />
             </div>
           </Panel>
@@ -267,7 +252,7 @@ export default function AstronautPage() {
                   data={m[x.key]}
                   // Cardio a lo ancho; si el resto queda impar, la última tarjeta también
                   wide={x.key === 'cardio' || (i === charted.length - 1 && (charted.length - 1) % 2 === 1)}
-                  onClick={() => navigate(`/mod/${x.key}`)}
+                  onClick={() => openModule(x.key)}
                 />
               ))}
             </div>
@@ -284,7 +269,7 @@ export default function AstronautPage() {
                       <button
                         key={x.key}
                         type="button"
-                        onClick={() => navigate(`/mod/${x.key}`)}
+                        onClick={() => openModule(x.key)}
                         className="flex items-center gap-2 rounded-lg border border-line bg-void px-2.5 py-2 text-left text-xs transition hover:border-cyan/60"
                       >
                         <Icon className="h-3.5 w-3.5 shrink-0 text-cyan" aria-hidden />

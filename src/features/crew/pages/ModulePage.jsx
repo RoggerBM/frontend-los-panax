@@ -1,27 +1,42 @@
-import { ChevronRight, Info } from 'lucide-react'
+import { BellRing, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import clsx from 'clsx'
 import { CrewChart, Sparkline } from '../components/charts'
 import EcgStrip from '../components/EcgStrip'
+import { NutritionPanel } from '@/features/nutrition'
 import FatigueTestCard from '../components/FatigueTestCard'
+import RecommendationsModal from '../components/RecommendationsModal'
 import { Panel, StatusTag } from '../components/ui'
 import { CREW_COLORS, MODULE_BY_KEY, formatValue } from '../config/modules'
 import { statusOf } from '../config/status'
 import { useCrew } from '../context/crewContext'
 import { worstModuleLevel } from '../lib/crewModel'
 
-/** Vista de un módulo: comparación de toda la tripulación (Livorbit /mod/:k). */
+/**
+ * Vista de un módulo.
+ * - /mod/:k → comparación de toda la tripulación (Livorbit).
+ * - /mod/:k?crew=<id> → solo los datos de esa persona (se abre desde su ficha, sin comparar con otros).
+ */
 export default function ModulePage() {
   const { moduleKey } = useParams()
-  const { crew } = useCrew()
+  const [params] = useSearchParams()
+  const { crew, getMember, showToast } = useCrew()
   const navigate = useNavigate()
   const [hidden, setHidden] = useState(() => new Set())
+  // Modal de recomendaciones: solo se abre al pulsar el botón (guarda para qué módulo/persona se abrió)
+  const [recsFor, setRecsFor] = useState(null)
   const mod = MODULE_BY_KEY[moduleKey]
+  const focus = getMember(params.get('crew') ?? '')
 
   if (!mod) return <Navigate to="/" replace />
   const Icon = mod.icon
-  const sorted = crew.slice().sort((a, b) => b.modules[mod.key].st - a.modules[mod.key].st)
+  const people = focus ? [focus] : crew
+  const level = worstModuleLevel(people, mod.key)
+  const flagged = people.filter((c) => c.modules[mod.key].st !== 0).sort((a, b) => b.modules[mod.key].st - a.modules[mod.key].st)
+  const ackKey = `${mod.key}:${focus?.id ?? ''}`
+  const recsOpen = recsFor === ackKey
+  const sorted = people.slice().sort((a, b) => b.modules[mod.key].st - a.modules[mod.key].st)
 
   const toggle = (id) =>
     setHidden((prev) => {
@@ -38,6 +53,14 @@ export default function ModulePage() {
           Home
         </Link>
         <ChevronRight className="h-3 w-3" aria-hidden />
+        {focus && (
+          <>
+            <Link to={`/ast/${focus.id}`} className="hover:text-cyan">
+              {focus.name}
+            </Link>
+            <ChevronRight className="h-3 w-3" aria-hidden />
+          </>
+        )}
         <span className="text-slate-200">{mod.name}</span>
       </nav>
 
@@ -49,15 +72,42 @@ export default function ModulePage() {
           <div>
             <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-cyan">Biomedical module</span>
             <h2 className="text-lg font-extrabold text-white">{mod.name}</h2>
-            <p className="text-xs text-slate-300">{mod.metric} · whole-crew comparison</p>
+            <p className="text-xs text-slate-300">
+              {mod.metric} · {focus ? focus.name : 'whole-crew comparison'}
+            </p>
           </div>
         </div>
-        <StatusTag level={worstModuleLevel(crew, mod.key)} />
+        <div className="flex items-center gap-2">
+          <StatusTag level={level} />
+          <button
+            type="button"
+            onClick={() => setRecsFor(ackKey)}
+            aria-haspopup="dialog"
+            className="relative inline-flex items-center gap-1.5 rounded-lg border-[1.5px] px-3 py-1.5 text-xs font-bold transition hover:brightness-125"
+            style={{ borderColor: statusOf(level).hex, color: statusOf(level).fg, backgroundColor: `${statusOf(level).hex}1a` }}
+          >
+            <BellRing className="h-4 w-4" aria-hidden /> Recommendations
+            {level > 0 && (
+              <span
+                className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 font-mono text-[9.5px] text-void"
+                style={{ backgroundColor: statusOf(level).fg }}
+              >
+                {flagged.length}
+              </span>
+            )}
+          </button>
+        </div>
       </div>
 
-      {mod.key === 'fat' && <FatigueTestCard />}
+      {mod.key === 'fat' && <FatigueTestCard members={people} />}
 
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      {mod.key === 'nut' && (
+        <section className="rounded-xl border-[1.5px] border-cyan/60 bg-[linear-gradient(135deg,#143238_0%,#0B101B_55%)] p-4">
+          <NutritionPanel key={focus?.id ?? 'all'} crew={people} onlyId={focus?.id} onToast={showToast} />
+        </section>
+      )}
+
+      <div className={clsx('grid grid-cols-1 gap-3', !focus && 'md:grid-cols-2')}>
         {sorted.map((c) => {
           const d = c.modules[mod.key]
           const st = statusOf(d.st)
@@ -99,12 +149,16 @@ export default function ModulePage() {
       </div>
 
       <Panel>
-        <div className="mb-2 flex flex-wrap items-center gap-2.5">
-          <h3 className="text-sm font-bold text-white">Crew comparison · 7 days</h3>
-          <span className="text-[11px] text-slate-400">Tap a name to hide or show it</span>
-        </div>
-        <div className="mb-2 flex flex-wrap gap-1.5">
-          {crew.map((c, j) => {
+        {focus ? (
+          <h3 className="mb-2 text-sm font-bold text-white">7-day trend · {focus.name}</h3>
+        ) : (
+          <>
+            <div className="mb-2 flex flex-wrap items-center gap-2.5">
+              <h3 className="text-sm font-bold text-white">Crew comparison · 7 days</h3>
+              <span className="text-[11px] text-slate-400">Tap a name to hide or show it</span>
+            </div>
+            <div className="mb-2 flex flex-wrap gap-1.5">
+              {crew.map((c, j) => {
             const color = CREW_COLORS[j % CREW_COLORS.length]
             const on = !hidden.has(c.id)
             return (
@@ -120,27 +174,25 @@ export default function ModulePage() {
               </button>
             )
           })}
-        </div>
-        <CrewChart mod={mod} crew={crew} hidden={hidden} />
+            </div>
+          </>
+        )}
+        <CrewChart mod={mod} crew={people} hidden={focus ? new Set() : hidden} />
       </Panel>
 
-      <Panel>
-        <h3 className="mb-2 text-sm font-bold text-white">Module recommendations</h3>
-        <ol className="list-decimal space-y-1 pl-5 text-sm text-slate-300">
-          {mod.todo.map((t) => (
-            <li key={t}>{t}</li>
-          ))}
-        </ol>
-        <details className="mt-3 rounded-lg border border-line bg-void px-3 py-2.5 text-sm text-slate-400">
-          <summary className="flex cursor-pointer items-center gap-1.5 text-slate-200">
-            <Info className="h-4 w-4 text-cyan" aria-hidden /> What it is and why it matters in space
-          </summary>
-          <p className="mt-2">{mod.info}</p>
-          <p className="mt-1">
-            NASA HRP risk: <b className="text-slate-200">{mod.hrp}</b>
-          </p>
-        </details>
-      </Panel>
+      {recsOpen && (
+        <RecommendationsModal
+          mod={mod}
+          level={level}
+          flagged={flagged}
+          personName={focus?.name}
+          onClose={() => setRecsFor(null)}
+          onNotifyEarth={() => {
+            setRecsFor(null)
+            showToast(`${mod.name} recommendations sent to Earth · arrives in ~14 min`)
+          }}
+        />
+      )}
     </section>
   )
 }

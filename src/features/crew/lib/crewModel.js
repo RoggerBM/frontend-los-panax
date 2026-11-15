@@ -142,12 +142,15 @@ function weekSeries(mod, v, st, rnd) {
  * overrides.pvt_ms: PVT medido en la validación cognitiva del usuario actual.
  */
 export function buildMember(user, index, readings, overrides = {}) {
+  const { nutrition, ...readingOverrides } = overrides
   const seed = hashString(user.id)
   const rnd = seededRandom(seed)
-  const r = { ...readings, ...overrides }
+  const r = { ...readings, ...readingOverrides }
   const exerciseMin = Math.round(92 + rnd() * 43 - (r.sleep_hours < 6 ? 28 : 0))
 
   const evaluated = evaluateModules(r, exerciseMin)
+  // overrides.nutrition: análisis de la IA nutricional a bordo, que manda sobre la regla simple
+  if (nutrition) evaluated.nut = nutrition
   const modules = {}
   for (const mod of MODULES) {
     const e = evaluated[mod.key]

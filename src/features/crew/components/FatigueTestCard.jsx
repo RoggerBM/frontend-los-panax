@@ -14,9 +14,12 @@ const fmtTime = (at) => (at ? new Date(at).toLocaleString('en-US', { month: 'sho
 const ms = (v) => (v == null ? '—' : `${Math.round(v)} ms`)
 
 /** Acceso al test de fatiga desde el módulo Fatigue & Sleep, con el último resultado de cada tripulante. */
-export default function FatigueTestCard() {
+export default function FatigueTestCard({ members }) {
   const navigate = useNavigate()
-  const { crew } = useCrew()
+  const { crew: allCrew } = useCrew()
+  // members: limita la tarjeta a esas personas (p. ej. solo el tripulante de la ficha)
+  const crew = members ?? allCrew
+  const single = crew.length === 1 ? crew[0] : null
 
   return (
     <section className="rounded-xl border-[1.5px] border-cyan/70 bg-[linear-gradient(135deg,#143238_0%,#111726_60%)] p-4 shadow-[0_0_18px_rgb(56_254_220/0.12)]">
@@ -49,7 +52,7 @@ export default function FatigueTestCard() {
         </div>
         <button
           type="button"
-          onClick={() => navigate('/mod/fat/test')}
+          onClick={() => navigate(single ? `/mod/fat/test?crew=${single.id}` : '/mod/fat/test')}
           className="inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-cyan bg-cobalt/40 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-cobalt/60"
         >
           <Play className="h-4 w-4" aria-hidden /> Start fatigue test
@@ -57,7 +60,9 @@ export default function FatigueTestCard() {
       </div>
 
       <div className="mt-4 border-t border-line pt-3">
-        <p className="mb-2 font-mono text-[10px] uppercase tracking-wider text-slate-400">Last result per crew member</p>
+        <p className="mb-2 font-mono text-[10px] uppercase tracking-wider text-slate-400">
+          {single ? 'Last result' : 'Last result per crew member'}
+        </p>
         <ul className="grid gap-2 md:grid-cols-2">
           {crew.map((c) => {
             const t = c.lastTest

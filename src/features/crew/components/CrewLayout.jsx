@@ -1,6 +1,7 @@
 import { LayoutList } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import { NutritionProvider } from '@/features/nutrition'
 import Starfield from '@/shared/components/Starfield'
 import { useVoiceCopilot } from '@/shared/hooks/useVoiceCopilot'
 import { CrewProvider } from '../context/CrewProvider'
@@ -37,18 +38,30 @@ function Shell() {
   const { pathname } = useLocation()
   const voice = useVoiceCopilot()
   const [screensOpen, setScreensOpen] = useState(false)
-  const [navOpen, setNavOpen] = useState(readNavOpen)
+  const isHome = pathname === '/'
+  // Preferencia guardada (solo la cambia el botón en el inicio); en el resto de vistas la barra se pliega sola
+  const [navPref, setNavPref] = useState(readNavOpen)
+  const [navOpen, setNavOpen] = useState(() => isHome && readNavOpen())
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const transcript = buildTranscript(crew)
 
-  const changeNav = useCallback((open) => {
-    setNavOpen(open)
+  // Cualquier selección que navega (ficha, módulo, test, emergencia, accesos…) oculta la barra
+  useEffect(() => {
+    setNavOpen(isHome && navPref)
+    setMobileNavOpen(false)
+  }, [pathname, isHome, navPref])
+
+  const toggleNav = useCallback(() => {
+    const next = !navOpen
+    setNavOpen(next)
+    if (!isHome) return // fuera del inicio, abrirla es temporal
+    setNavPref(next)
     try {
-      localStorage.setItem(NAV_KEY, open ? '1' : '0')
+      localStorage.setItem(NAV_KEY, next ? '1' : '0')
     } catch {
       /* preferencia solo en memoria */
     }
-  }, [])
+  }, [navOpen, isHome])
 
   const closeMobileNav = useCallback(() => setMobileNavOpen(false), [])
 
@@ -59,19 +72,22 @@ function Shell() {
         crew={crew}
         linkStatus={linkStatus}
         environment={environment}
-        onEnvironmentChange={setEnvironment}
+        onEnvironmentChange={(env) => {
+          setEnvironment(env)
+          setNavOpen(false)
+        }}
         voice={voice}
-        onSpeak={() => voice.speak(`AEGIS-MED medical copilot. ${transcript}`)}
+        onSpeak={() => voice.speak(`Space Q-Health medical copilot. ${transcript}`)}
         transcript={transcript}
-        showTranscript={pathname === '/'}
+        showTranscript={isHome}
       />
 
       <div className="mx-auto flex w-full max-w-[1540px] flex-1 items-start gap-5 px-3 pb-28 pt-4 sm:px-5">
         <ModuleSidebar
           crew={crew}
           open={navOpen}
-          onToggle={() => changeNav(!navOpen)}
-          onSelect={() => changeNav(false)}
+          onToggle={toggleNav}
+          onSelect={() => setNavOpen(false)}
           mobileOpen={mobileNavOpen}
           onMobileClose={closeMobileNav}
         />
@@ -97,7 +113,10 @@ function Shell() {
         onClose={() => setScreensOpen(false)}
         crew={crew}
         demoMode={demoMode}
-        onDemoModeChange={setDemoMode}
+        onDemoModeChange={(mode) => {
+          setDemoMode(mode)
+          setNavOpen(false)
+        }}
       />
 
       {toast && (
@@ -115,8 +134,10 @@ function Shell() {
 /** Marco común de las pantallas de tripulación: cabecera, módulos y barra inferior. */
 export default function CrewLayout() {
   return (
-    <CrewProvider>
-      <Shell />
-    </CrewProvider>
+    <NutritionProvider>
+      <CrewProvider>
+        <Shell />
+      </CrewProvider>
+    </NutritionProvider>
   )
 }
