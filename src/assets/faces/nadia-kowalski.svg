@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Tripulante FICTICIA (avatar ilustrado). Cualquier parecido con personas reales es casual. -->
+  <rect width="200" height="200" fill="#1e293b"/>
+  <!-- traje de vuelo azul con parche de misión -->
+  <path d="M28 200c0-42 32-64 72-64s72 22 72 64z" fill="#1d4ed8"/>
+  <path d="M84 138l16 20 16-20" fill="none" stroke="#93c5fd" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="140" cy="170" r="11" fill="#0b1631" stroke="#f2c94c" stroke-width="2.5"/>
+  <circle cx="140" cy="170" r="4" fill="#38fedc"/>
+  <rect x="88" y="118" width="24" height="24" fill="#e9b99a"/>
+  <ellipse cx="100" cy="92" rx="35" ry="43" fill="#f3cbb0"/>
+  <!-- pelo rubio corto -->
+  <path d="M63 92c-4-38 14-58 37-58s43 18 38 56c-6-16-16-24-26-26-10 8-30 12-49 28z" fill="#e8c46a"/>
+  <circle cx="86" cy="95" r="4" fill="#1f2937"/>
+  <circle cx="114" cy="95" r="4" fill="#1f2937"/>
+  <path d="M79 85q7-4 14 0M107 85q7-4 14 0" stroke="#b08a3e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M89 116q11 7 22 0" stroke="#be185d" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>
