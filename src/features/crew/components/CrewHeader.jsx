@@ -10,7 +10,7 @@ const LINK = {
   live: { label: 'LIVE SENSORS', cls: 'border-lime/40 bg-lime/10 text-lime', dot: 'bg-lime animate-pulse' },
   connecting: { label: 'CONNECTING…', cls: 'border-cyan/40 bg-cyan/10 text-cyan', dot: 'bg-cyan animate-ping' },
   offline: { label: 'NO LINK • LOCAL', cls: 'border-caution/40 bg-caution/10 text-caution', dot: 'bg-caution' },
-  disabled: { label: 'LOCAL SIMULATION', cls: 'border-line bg-panel text-slate-400', dot: 'bg-slate-500' },
+  disabled: { label: 'SIMULATED CREW DATA', cls: 'border-line bg-panel text-slate-400', dot: 'bg-slate-500' },
 }
 
 function MedicalCross() {

@@ -2,6 +2,7 @@ import { Palette, Play, ScanFace, Timer, TrafficCone, Zap } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { VerdictBadge } from '@/features/cognitive'
 import { useCrew } from '../context/crewContext'
+import TestButton from './TestButton'
 
 const PARTS = [
   { icon: ScanFace, label: 'Face scan', hint: 'Biometric validation before the test' },
@@ -50,13 +51,14 @@ export default function FatigueTestCard({ members }) {
             </span>
           </div>
         </div>
-        <button
-          type="button"
+        <TestButton
+          size="lg"
+          icon={Play}
+          className="shrink-0"
           onClick={() => navigate(single ? `/mod/fat/test?crew=${single.id}` : '/mod/fat/test')}
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-cyan bg-cobalt/40 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-cobalt/60"
         >
-          <Play className="h-4 w-4" aria-hidden /> Start fatigue test
-        </button>
+          Start fatigue test
+        </TestButton>
       </div>
 
       <div className="mt-4 border-t border-line pt-3">
@@ -80,13 +82,9 @@ export default function FatigueTestCard({ members }) {
                     <VerdictBadge verdict={t.verdict} compact />
                   </div>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => navigate(`/mod/fat/test?crew=${c.id}`)}
-                    className="shrink-0 rounded-md border border-cyan/60 px-2.5 py-1 text-[11px] font-semibold text-cyan transition hover:bg-cyan/10"
-                  >
+                  <TestButton size="sm" className="shrink-0" onClick={() => navigate(`/mod/fat/test?crew=${c.id}`)}>
                     Take test
-                  </button>
+                  </TestButton>
                 )}
               </li>
             )

@@ -49,6 +49,28 @@
   }
 }
 
+/* Aviso de datos simulados en el inicio (enlaza a NASA Data) */
+.sim-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 6px;
+  margin-right: 6px;
+  color: #5aa9ff;
+  background: rgba(90, 169, 255, 0.12);
+  border: 1px solid rgba(90, 169, 255, 0.35);
+}
+.sim-note {
+  font-size: 13px;
+  color: #93a0b8;
+  margin: 4px 0 10px;
+}
+.sim-note a {
+  color: #5aa9ff;
+}
+
 @utility bg-hud {
   background-color: var(--color-void);
   background-image:

@@ -1,9 +1,10 @@
 import clsx from 'clsx'
-import { Database, House, Plus, Timer, X } from 'lucide-react'
+import { Database, House, Plus, X } from 'lucide-react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MODULES } from '../config/modules'
 import { DEMO_MODES } from '../config/scenarios'
+import TestButton from './TestButton'
 import { StatusDot } from './ui'
 
 function Group({ title, children }) {
@@ -105,9 +106,9 @@ export default function ScreensSheet({ open, onClose, crew, demoMode, onDemoMode
         </Group>
 
         <Group title="Fatigue test">
-          <button type="button" className={linkCls} onClick={() => go('/mod/fat/test')}>
-            <Timer className="h-4 w-4 text-cyan" aria-hidden /> PVT + Go/No-Go + Stroop
-          </button>
+          <TestButton size="md" onClick={() => go('/mod/fat/test')}>
+            PVT + Go/No-Go + Stroop
+          </TestButton>
         </Group>
       </div>
     </div>

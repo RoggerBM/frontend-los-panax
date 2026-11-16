@@ -1,8 +1,9 @@
-import { BedDouble, ChevronRight, Dumbbell, GlassWater, MapPin, SatelliteDish, Timer, Utensils, Zap } from 'lucide-react'
+import { BedDouble, ChevronRight, Dumbbell, GlassWater, MapPin, SatelliteDish, Utensils, Zap } from 'lucide-react'
 import { Suspense, lazy, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { GoalRing } from '../components/charts'
 import ModuleCard from '../components/ModuleCard'
+import TestButton from '../components/TestButton'
 import { Heart, Panel, SectionLabel, StatusDot, StatusTag } from '../components/ui'
 import { BODY_ZONES, MODULES, formatValue } from '../config/modules'
 import { statusOf } from '../config/status'
@@ -109,13 +110,12 @@ export default function AstronautPage() {
         <span className="text-slate-200">{member.name}</span>
       </nav>
 
-      {/* Cabecera del tripulante */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border-[1.5px] bg-panel p-3.5" style={{ borderColor: st.hex }}>
-        <div className="flex items-center gap-3">
+      {/* Cabecera del tripulante: 80 % datos · 20 % botón del test */}
+      <div className="grid grid-cols-1 items-stretch gap-3 md:grid-cols-[minmax(0,4fr)_minmax(0,1fr)]">
+        <div className="flex flex-wrap items-center gap-3 rounded-xl border-[1.5px] bg-panel p-3.5" style={{ borderColor: st.hex }}>
           <img src={member.image} alt="" className="h-14 w-14 rounded-xl border-[1.5px] object-cover" style={{ borderColor: st.hex }} />
           <div>
-            <h2 className="text-base font-extrabold uppercase text-white sm:text-lg">
-              {member.name}            </h2>
+            <h2 className="text-base font-extrabold uppercase text-white sm:text-lg">{member.name}</h2>
             <p className="flex items-center gap-1 font-mono text-xs text-slate-400">
               {member.role} • <MapPin className="h-3 w-3" aria-hidden />
               {member.location === 'EVA' ? 'Outside (EVA)' : 'Ship'} • {member.crewCode}
@@ -128,6 +128,9 @@ export default function AstronautPage() {
           </span>
           <StatusTag level={member.level} />
         </div>
+        <TestButton size="lg" className="h-full min-h-[64px] w-full" onClick={() => navigate(`/mod/fat/test?crew=${member.id}`)}>
+          Take fatigue test
+        </TestButton>
       </div>
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
@@ -318,13 +321,9 @@ export default function AstronautPage() {
               >
                 <SatelliteDish className="h-4 w-4" aria-hidden /> Notify Earth
               </button>
-              <button
-                type="button"
-                onClick={() => navigate(`/mod/fat/test?crew=${member.id}`)}
-                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border-[1.5px] border-line bg-void px-3 py-2 text-xs font-semibold text-slate-200 transition hover:border-cyan hover:text-cyan"
-              >
-                <Timer className="h-4 w-4" aria-hidden /> Take fatigue test
-              </button>
+              <TestButton size="sm" className="flex-1" onClick={() => navigate(`/mod/fat/test?crew=${member.id}`)}>
+                Take fatigue test
+              </TestButton>
             </div>
           </Panel>
         </div>

@@ -1,5 +1,5 @@
 import { Settings2 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AstroCard from '../components/AstroCard'
 import { useCrew } from '../context/crewContext'
 
@@ -24,6 +24,12 @@ export default function CrewHomePage() {
           Select a crew member to see their 3D twin, modules and protocol
         </span>
       </div>
+
+      <p className="sim-note px-1">
+        <span className="sim-badge">Simulated</span>
+        Crew and vitals are simulated, built on real NASA data.{' '}
+        <Link to="/nasa-data">See the real data →</Link>
+      </p>
 
       {sensorIssues.map(({ member, mod }) => (
         <button

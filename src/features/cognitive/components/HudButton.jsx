@@ -1,7 +1,8 @@
 import clsx from 'clsx'
 
 const VARIANTS = {
-  primary: 'border-cyan bg-cyan text-void shadow-[0_0_24px_rgb(56_254_220/0.45)] hover:brightness-110',
+  // Amarillo-lima: el mismo color de los botones de test del resto de la app
+  primary: 'border-white/80 bg-[#E8FF5A] text-[#090D16] shadow-[0_0_28px_rgb(232_255_90/0.55)] hover:bg-[#F2FF8F]',
   ghost: 'border-slate-400/60 bg-white/5 text-slate-100 hover:border-cyan hover:text-cyan',
   danger: 'border-critical/60 bg-critical/10 text-[#FF6B6B] hover:bg-critical/20',
 }

@@ -62,10 +62,10 @@ function MiniPvt({ onDone }) {
       className={clsx(
         'flex h-40 w-full touch-manipulation select-none items-center justify-center gap-2.5 rounded-2xl border-2 px-3 text-center text-xl font-extrabold transition-colors',
         phase === 'wait' && 'border-[#FF6B6B] bg-[#FF6B6B]/25 text-white',
-        phase === 'go' && 'border-white bg-[#E8FF5A] text-void shadow-[0_0_50px_rgb(232_255_90/0.6)]',
+        phase === 'go' && 'border-white bg-[#50EF39] text-void shadow-[0_0_50px_rgb(80_239_57/0.6)]',
         phase === 'early' && 'border-caution bg-caution/15 text-caution',
         phase === 'done' && 'border-lime bg-lime/15 text-lime',
-        (phase === 'idle' || !phase) && 'border-cyan bg-[#22324F] text-cyan shadow-[0_0_24px_rgb(56_254_220/0.25)] hover:bg-[#2A3D5F]',
+        (phase === 'idle' || !phase) && 'border-white/80 bg-[#E8FF5A] text-void shadow-[0_0_32px_rgb(232_255_90/0.55)] hover:bg-[#F2FF8F]',
       )}
     >
       {label ?? (
