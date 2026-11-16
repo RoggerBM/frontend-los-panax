@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import FaceImage from '@/shared/components/FaceImage'
 import { AlertTriangle, Check, Droplets, Nut, SatelliteDish, Send, SkipForward, Utensils, X } from 'lucide-react'
 import { useState } from 'react'
 import { LEVEL_HEX, LINKS, LOG_ENTRIES, analyze, applyLog, recommendations } from '../lib/nutritionModel'
@@ -145,7 +146,7 @@ export default function NutritionPanel({ crew, onlyId, onToast = () => {} }) {
                 p.id === selectedId ? 'border-cyan bg-cyan/15 text-white' : 'border-line bg-panel text-slate-300 hover:border-cyan/60',
               )}
             >
-              {c?.image && <img src={c.image} alt="" className="h-6 w-6 rounded-full object-cover" />}
+              {c?.image && <FaceImage person={c} className="h-6 w-6 rounded-full object-cover" />}
               <span className="h-2 w-2 rounded-full" style={{ backgroundColor: LEVEL_HEX[st] }} />
               {p.name}
             </button>

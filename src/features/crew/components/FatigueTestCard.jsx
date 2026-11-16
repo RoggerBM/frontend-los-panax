@@ -1,4 +1,5 @@
 import { Palette, Play, ScanFace, Timer, TrafficCone, Zap } from 'lucide-react'
+import FaceImage from '@/shared/components/FaceImage'
 import { useNavigate } from 'react-router-dom'
 import { VerdictBadge } from '@/features/cognitive'
 import { useCrew } from '../context/crewContext'
@@ -70,7 +71,7 @@ export default function FatigueTestCard({ members }) {
             const t = c.lastTest
             return (
               <li key={c.id} className="flex items-center gap-2.5 rounded-lg border border-line bg-void p-2">
-                <img src={c.image} alt="" className="h-9 w-9 shrink-0 rounded-md object-cover" />
+                <FaceImage person={c} className="h-9 w-9 shrink-0 rounded-md object-cover" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-xs font-semibold text-slate-100">{c.name}</p>
                   <p className="font-mono text-[10.5px] text-slate-400">

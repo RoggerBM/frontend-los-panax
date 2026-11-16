@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import FaceImage from '@/shared/components/FaceImage'
 import { Check, ChevronRight, Pause, Play, Plus, RotateCcw, SatelliteDish } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -67,7 +68,7 @@ export default function EmergencyPage() {
               patient === c.id ? 'border-critical bg-critical/20 text-white' : 'border-line bg-panel text-slate-300 hover:border-critical/60',
             )}
           >
-            <img src={c.image} alt="" className="h-6 w-6 rounded-full object-cover" />
+            <FaceImage person={c} className="h-6 w-6 rounded-full object-cover" />
             {c.name}
           </button>
         ))}

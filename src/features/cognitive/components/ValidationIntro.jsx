@@ -1,4 +1,5 @@
 import { ScanFace, Timer } from 'lucide-react'
+import FaceImage from '@/shared/components/FaceImage'
 import { TESTS } from '../config/tests'
 import { VALIDATION_BLOCKS, VALIDATION_DURATION } from '../config/validation'
 import HudButton from './HudButton'
@@ -7,7 +8,7 @@ export default function ValidationIntro({ user, onStart, onChangeOperator }) {
   return (
     <div className="animate-fade-in flex flex-col gap-6">
       <div className="flex items-center gap-3">
-        <img src={user.image} alt="" className="h-20 w-20 rounded-xl border-2 border-cyan object-cover" />
+        <FaceImage person={user} badge="lg" className="h-20 w-20 rounded-xl border-2 border-cyan object-cover" />
         <div className="flex-1">
           <p className="font-mono text-sm font-bold uppercase tracking-widest text-cyan">Operator</p>
           <h2 className="text-3xl font-extrabold text-white">{user.name}</h2>

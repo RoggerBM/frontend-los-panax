@@ -1,4 +1,8 @@
 import { hashString } from '@/shared/utils/math'
+// Ids de las caras generadas con IA: se marcan con "AI generated" en toda la app
+import AI_GENERATED from '../../../assets/faces/ai-generated.json'
+
+const AI_IDS = new Set(AI_GENERATED)
 
 /**
  * Cada imagen dentro de src/assets/faces se convierte en un usuario.
@@ -36,6 +40,7 @@ function buildUser(path, image) {
     image,
     // Los .svg de la carpeta son marcadores de posición; cualquier otro formato es una foto real
     hasPhoto: !/\.svg$/i.test(file),
+    aiGenerated: AI_IDS.has(id),
     role: ROLES[h % ROLES.length],
     clearance: CLEARANCES[h % CLEARANCES.length],
     crewCode: `CRW-${String(h % 10000).padStart(4, '0')}`,

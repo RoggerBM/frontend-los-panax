@@ -1,4 +1,5 @@
 import { BedDouble, ChevronRight, Dumbbell, GlassWater, MapPin, SatelliteDish, Utensils, Zap } from 'lucide-react'
+import FaceImage from '@/shared/components/FaceImage'
 import { Suspense, lazy, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { GoalRing } from '../components/charts'
@@ -113,7 +114,7 @@ export default function AstronautPage() {
       {/* Cabecera del tripulante: 80 % datos · 20 % botón del test */}
       <div className="grid grid-cols-1 items-stretch gap-3 md:grid-cols-[minmax(0,4fr)_minmax(0,1fr)]">
         <div className="flex flex-wrap items-center gap-3 rounded-xl border-[1.5px] bg-panel p-3.5" style={{ borderColor: st.hex }}>
-          <img src={member.image} alt="" className="h-14 w-14 rounded-xl border-[1.5px] object-cover" style={{ borderColor: st.hex }} />
+          <FaceImage person={member} className="h-14 w-14 rounded-xl border-[1.5px] object-cover" style={{ borderColor: st.hex }} />
           <div>
             <h2 className="text-base font-extrabold uppercase text-white sm:text-lg">{member.name}</h2>
             <p className="flex items-center gap-1 font-mono text-xs text-slate-400">

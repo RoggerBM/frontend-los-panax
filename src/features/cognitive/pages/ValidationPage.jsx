@@ -3,6 +3,7 @@ import { ChevronRight, UserRound } from 'lucide-react'
 import { useCallback, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { BiometricCheck, getUserById, getUsers } from '@/features/auth'
+import FaceImage from '@/shared/components/FaceImage'
 import BlockIntro from '../components/BlockIntro'
 import HudButton from '../components/HudButton'
 import ValidationIntro from '../components/ValidationIntro'
@@ -39,9 +40,8 @@ function OperatorPicker({ selectedId, onSelect, onContinue }) {
                 selectedId === u.id ? 'border-cyan bg-cyan/10' : 'border-line bg-void hover:border-cyan/60',
               )}
             >
-              <img
-                src={u.image}
-                alt=""
+              <FaceImage
+                person={u}
                 className={clsx('h-14 w-14 rounded-full object-cover ring-2', selectedId === u.id ? 'ring-cyan' : 'ring-line')}
               />
               <span className="text-xs font-semibold text-slate-100">{u.name}</span>

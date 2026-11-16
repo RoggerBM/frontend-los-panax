@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import FaceImage from '@/shared/components/FaceImage'
 import { useNavigate } from 'react-router-dom'
 import { statusOf } from '../config/status'
 import AstronautPortrait from './AstronautPortrait'
@@ -40,7 +41,7 @@ export default function AstroCard({ member }) {
       >
         {member.hasPhoto ? (
           <>
-            <img src={member.image} alt={`Photo of ${member.name}`} className="h-full w-full object-cover" />
+            <FaceImage person={member} badge="none" alt={`Photo of ${member.name}`} className="h-full w-full object-cover" />
             {/* Marco HUD sobre la foto, como en el retrato por defecto */}
             <svg viewBox="0 0 180 180" className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden>
               <defs>
@@ -61,6 +62,15 @@ export default function AstroCard({ member }) {
           </>
         ) : (
           <AstronautPortrait stripe={member.suitStripe} statusHex={st.hex} />
+        )}
+        {/* Marca de imagen generada con IA (foto o retrato de una persona ficticia) */}
+        {member.aiGenerated && (
+          <span
+            className="absolute left-1/2 top-1.5 -translate-x-1/2 whitespace-nowrap rounded border border-white bg-[#7c3aed] px-1.5 py-0.5 font-mono text-[9.5px] font-extrabold uppercase tracking-wider text-white shadow-[0_0_8px_rgb(124_58_237/0.8)]"
+            title="AI-generated image"
+          >
+            AI generated
+          </span>
         )}
         <span className="absolute bottom-1.5 right-1.5 rounded border border-line bg-void/85 px-1.5 py-0.5 font-mono text-[9.5px] font-bold text-slate-200">
           SpO₂ {r.spo2}%

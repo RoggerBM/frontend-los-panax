@@ -1,4 +1,5 @@
 import { BellRing, Info, SatelliteDish } from 'lucide-react'
+import FaceImage from '@/shared/components/FaceImage'
 import { statusOf } from '../config/status'
 import { StatusTag } from './ui'
 
@@ -48,7 +49,7 @@ export default function RecommendationsPanel({ mod, level, flagged, personName, 
                 const s = statusOf(d.st)
                 return (
                   <li key={c.id} className="flex items-start gap-2 rounded-lg border bg-void p-2" style={{ borderColor: `${s.hex}66` }}>
-                    <img src={c.image} alt="" className="h-7 w-7 shrink-0 rounded-md object-cover" />
+                    <FaceImage person={c} className="h-7 w-7 shrink-0 rounded-md object-cover" />
                     <div className="min-w-0 flex-1">
                       <p className="flex items-center justify-between gap-2 text-xs font-bold text-slate-100">
                         <span className="truncate">{c.name}</span>

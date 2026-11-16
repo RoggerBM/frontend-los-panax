@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import FaceImage from '@/shared/components/FaceImage'
 import { ArrowLeft, ScanFace, X } from 'lucide-react'
 import { useCamera } from '@/shared/hooks/useCamera'
 import { useBiometricScan } from '../hooks/useBiometricScan'
@@ -44,7 +45,7 @@ export default function BiometricCheck({ user, testName, onVerified, onCancel })
   return (
     <div className="animate-fade-in flex flex-col gap-4">
       <div className="flex items-center gap-3">
-        <img src={user.image} alt="" className="h-12 w-12 rounded-lg border-[1.5px] border-cyan/60 object-cover" />
+        <FaceImage person={user} className="h-12 w-12 rounded-lg border-[1.5px] border-cyan/60 object-cover" />
         <div>
           <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-cyan">Biometric validation</p>
           <h2 className="text-base font-extrabold text-white">Confirm it is you, {user.name.split(' ')[0]}</h2>

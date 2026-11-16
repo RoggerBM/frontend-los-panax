@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import FaceImage from '@/shared/components/FaceImage'
 import { ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -143,7 +144,7 @@ export default function ModulePage() {
                     >
                       <div className="flex items-center justify-between gap-2">
                         <span className="flex min-w-0 items-center gap-2">
-                          <img src={c.image} alt="" className="h-7 w-7 rounded-md object-cover" />
+                          <FaceImage person={c} className="h-7 w-7 rounded-md object-cover" />
                           <span className="truncate text-sm font-bold text-white">{c.name}</span>
                         </span>
                         <StatusTag level={d.st} short />
