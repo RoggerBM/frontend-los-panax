@@ -34,17 +34,17 @@ export default function GoNoGoTest({ params, onComplete }) {
         {visible ? (
           <div
             className={clsx(
-              'h-44 w-44 rounded-full',
+              'h-64 w-64 rounded-full',
               current.kind === 'go'
                 ? 'bg-green-500 shadow-[0_0_40px_rgb(34_197_94/0.5)]' // verde fijo: es el estímulo "pulsa"
                 : 'bg-rose-500 shadow-[0_0_40px_rgb(244_63_94/0.5)]',
             )}
           />
         ) : (
-          <span className="text-4xl text-slate-600">+</span>
+          <span className="text-6xl text-slate-300">+</span>
         )}
       </StimulusArea>
-      <p className={clsx('h-4 text-xs', feedback?.className)}>{feedback?.text}</p>
+      <p className={clsx('h-6 text-base font-semibold', feedback?.className)}>{feedback?.text}</p>
     </div>
   )
 }

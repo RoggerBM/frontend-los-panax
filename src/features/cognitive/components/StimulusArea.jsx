@@ -8,7 +8,7 @@ export default function StimulusArea({ onPress, children }) {
         e.preventDefault()
         onPress()
       }}
-      className="flex h-72 w-full cursor-pointer touch-manipulation select-none items-center justify-center rounded-xl border-[1.5px] border-line bg-void"
+      className="flex h-[26rem] w-full cursor-pointer touch-manipulation select-none items-center justify-center rounded-2xl border-2 border-cyan/50 bg-[#22324F]"
     >
       {children}
     </div>

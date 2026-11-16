@@ -119,7 +119,7 @@ function FatigueTestRun({ user, onChangeOperator }) {
   return (
     <>
       {stage === 'running' && (
-        <p className="-mt-2 mb-3 text-right font-mono text-[10.5px] text-slate-400">
+        <p className="-mt-2 mb-4 text-right font-mono text-sm text-slate-200">
           {user.name} · Block {blockIndex + 1}/{VALIDATION_BLOCKS.length} · {test.name}
         </p>
       )}
@@ -183,8 +183,8 @@ export default function ValidationPage() {
         <span className="text-slate-200">Fatigue test</span>
       </nav>
 
-      <div className="mx-auto max-w-xl rounded-xl border-[1.5px] border-cyan/60 bg-panel p-4 sm:p-5">
-        <p className="mb-4 font-mono text-[10.5px] font-bold uppercase tracking-widest text-cyan">
+      <div className="mx-auto max-w-4xl rounded-2xl border-2 border-cyan bg-[linear-gradient(160deg,#1C3F4F_0%,#172A44_55%,#141F38_100%)] p-5 shadow-[0_0_40px_rgb(56_254_220/0.25)] sm:p-8">
+        <p className="mb-5 font-mono text-sm font-bold uppercase tracking-widest text-cyan">
           Fatigue test · PVT + Go/No-Go + Stroop
         </p>
 

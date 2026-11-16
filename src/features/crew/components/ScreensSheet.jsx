@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { House, Plus, Timer, X } from 'lucide-react'
+import { Database, House, Plus, Timer, X } from 'lucide-react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MODULES } from '../config/modules'
@@ -60,6 +60,9 @@ export default function ScreensSheet({ open, onClose, crew, demoMode, onDemoMode
           </button>
           <button type="button" className={clsx(linkCls, 'hover:border-critical hover:text-red-300')} onClick={() => go('/emergencia')}>
             <Plus className="h-4 w-4" strokeWidth={3} aria-hidden /> Emergency
+          </button>
+          <button type="button" className={linkCls} onClick={() => go('/nasa-data')}>
+            <Database className="h-4 w-4 text-cyan" aria-hidden /> NASA Data
           </button>
         </Group>
 

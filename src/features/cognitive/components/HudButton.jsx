@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 
 const VARIANTS = {
-  primary: 'border-cyan bg-cobalt/40 text-white hover:bg-cobalt/60',
-  ghost: 'border-line bg-void text-slate-200 hover:border-cyan hover:text-cyan',
+  primary: 'border-cyan bg-cyan text-void shadow-[0_0_24px_rgb(56_254_220/0.45)] hover:brightness-110',
+  ghost: 'border-slate-400/60 bg-white/5 text-slate-100 hover:border-cyan hover:text-cyan',
   danger: 'border-critical/60 bg-critical/10 text-[#FF6B6B] hover:bg-critical/20',
 }
 
@@ -13,7 +13,7 @@ export default function HudButton({ variant = 'primary', icon, className, childr
     <button
       type="button"
       className={clsx(
-        'inline-flex items-center justify-center gap-2 rounded-lg border-[1.5px] px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan disabled:cursor-not-allowed disabled:opacity-40',
+        'inline-flex items-center justify-center gap-2 rounded-xl border-2 px-6 py-3.5 text-sm font-extrabold uppercase tracking-wider transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan disabled:cursor-not-allowed disabled:opacity-40',
         VARIANTS[variant],
         className,
       )}

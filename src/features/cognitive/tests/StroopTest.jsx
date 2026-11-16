@@ -25,13 +25,13 @@ export default function StroopTest({ params, onComplete }) {
     <div className="flex flex-col items-center gap-5">
       <TrialProgress index={index} total={total} />
 
-      <div className="flex h-56 w-full select-none items-center justify-center rounded-xl border-[1.5px] border-line bg-void">
+      <div className="flex h-80 w-full select-none items-center justify-center rounded-2xl border-2 border-cyan/50 bg-[#22324F]">
         {visible ? (
-          <span className="text-5xl font-bold tracking-wider sm:text-6xl" style={{ color: current.inkHex }}>
+          <span className="text-6xl font-extrabold tracking-wider sm:text-8xl" style={{ color: current.inkHex }}>
             {current.word}
           </span>
         ) : (
-          <span className="text-4xl text-slate-600">+</span>
+          <span className="text-6xl text-slate-300">+</span>
         )}
       </div>
 
@@ -44,7 +44,7 @@ export default function StroopTest({ params, onComplete }) {
               e.preventDefault()
               respond(c.id)
             }}
-            className="touch-manipulation rounded-lg border-[1.5px] border-line bg-panel px-3 py-3 text-sm font-semibold uppercase tracking-wider text-slate-100 hover:border-cyan/60"
+            className="touch-manipulation rounded-xl border-2 border-slate-400/50 bg-[#2E4064] px-4 py-5 text-lg font-bold uppercase tracking-wider text-white hover:border-cyan"
           >
             <span className="mr-2 font-mono text-slate-500">{c.key}</span>
             {c.label}

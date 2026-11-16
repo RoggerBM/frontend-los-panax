@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
+import { Database, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import { MODULES } from '../config/modules'
@@ -51,6 +51,35 @@ function ModuleLinks({ crew, compact, onNavigate }) {
         )
       })}
     </nav>
+  )
+}
+
+/** Acceso a "NASA Data": los datos reales detrás de la app. */
+function NasaDataLink({ compact, onNavigate }) {
+  return (
+    <NavLink
+      to="/nasa-data"
+      onClick={onNavigate}
+      title={compact ? 'NASA Data · real data behind the app' : undefined}
+      aria-label={compact ? 'NASA Data' : undefined}
+      className={({ isActive }) =>
+        clsx(
+          'flex items-center rounded-lg border-[1.5px] border-dashed transition-all',
+          compact ? 'h-10 w-10 justify-center' : 'gap-2 px-3 py-2.5',
+          isActive ? 'border-[#e8ff5a] bg-[#e8ff5a]/10' : 'border-line bg-panel hover:border-[#e8ff5a]/70',
+        )
+      }
+    >
+      <Database className="h-4 w-4 shrink-0 text-[#e8ff5a]" aria-hidden />
+      {!compact && (
+        <>
+          <span className="text-[13px] font-semibold text-slate-100">NASA Data</span>
+          <span className="ml-auto rounded border border-[#3ecf8e]/50 bg-[#3ecf8e]/15 px-1.5 py-0.5 font-mono text-[9.5px] font-bold uppercase text-[#3ecf8e]">
+            Real
+          </span>
+        </>
+      )}
+    </NavLink>
   )
 }
 
@@ -118,6 +147,7 @@ export default function ModuleSidebar({ crew, open, onToggle, onSelect, mobileOp
           </button>
         </div>
         <ModuleLinks crew={crew} compact={!open} onNavigate={onSelect} />
+        <NasaDataLink compact={!open} onNavigate={onSelect} />
         {open && <Legend />}
       </aside>
 
@@ -147,6 +177,7 @@ export default function ModuleSidebar({ crew, open, onToggle, onSelect, mobileOp
               </button>
             </div>
             <ModuleLinks crew={crew} compact={false} onNavigate={onMobileClose} />
+            <NasaDataLink compact={false} onNavigate={onMobileClose} />
             <Legend />
           </div>
         </div>

@@ -27,18 +27,18 @@ export default function PvtTest({ params, onComplete }) {
       <StimulusArea onPress={() => respond()}>
         <div
           className={clsx(
-            'flex h-44 w-44 items-center justify-center rounded-full border-4',
-            lit ? 'border-cyan bg-cyan shadow-[0_0_40px_rgb(56_254_220/0.5)]' : 'border-line bg-panel',
+            'flex h-64 w-64 items-center justify-center rounded-full border-[6px]',
+            lit ? 'border-white bg-[#E8FF5A] shadow-[0_0_70px_rgb(232_255_90/0.75)]' : 'border-slate-400/50 bg-[#2E4064]',
           )}
         >
           {lit ? (
-            <span className="text-2xl font-extrabold text-void">GO!</span>
+            <span className="text-5xl font-extrabold text-void">GO!</span>
           ) : (
-            <span className="text-4xl text-slate-600">+</span>
+            <span className="text-6xl text-slate-300">+</span>
           )}
         </div>
       </StimulusArea>
-      <p className="font-mono text-xs text-slate-400">False starts: {premature}</p>
+      <p className="font-mono text-base text-slate-200">False starts: {premature}</p>
     </div>
   )
 }

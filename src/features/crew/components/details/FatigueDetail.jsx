@@ -60,17 +60,17 @@ function MiniPvt({ onDone }) {
         tap()
       }}
       className={clsx(
-        'flex h-[90px] w-full touch-manipulation select-none items-center justify-center gap-2 rounded-xl border-2 px-2.5 text-center text-base font-bold transition-colors',
-        phase === 'wait' && 'border-critical bg-critical/20 text-white',
-        phase === 'go' && 'border-lime bg-lime text-void',
-        phase === 'early' && 'border-caution text-caution',
-        phase === 'done' && 'border-lime text-lime',
-        (phase === 'idle' || !phase) && 'border-dashed border-line bg-panel text-slate-200',
+        'flex h-40 w-full touch-manipulation select-none items-center justify-center gap-2.5 rounded-2xl border-2 px-3 text-center text-xl font-extrabold transition-colors',
+        phase === 'wait' && 'border-[#FF6B6B] bg-[#FF6B6B]/25 text-white',
+        phase === 'go' && 'border-white bg-[#E8FF5A] text-void shadow-[0_0_50px_rgb(232_255_90/0.6)]',
+        phase === 'early' && 'border-caution bg-caution/15 text-caution',
+        phase === 'done' && 'border-lime bg-lime/15 text-lime',
+        (phase === 'idle' || !phase) && 'border-cyan bg-[#22324F] text-cyan shadow-[0_0_24px_rgb(56_254_220/0.25)] hover:bg-[#2A3D5F]',
       )}
     >
       {label ?? (
         <>
-          <Play className="h-4 w-4" aria-hidden /> Tap to take the test (5 tries)
+          <Play className="h-6 w-6" aria-hidden /> Tap to take the test (5 tries)
         </>
       )}
     </button>
